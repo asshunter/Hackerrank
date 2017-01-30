@@ -1,0 +1,70 @@
+#include<stdio.h>
+#include<string.h>
+#include<malloc.h>
+typedef struct node
+{
+	struct node*pos[26];
+	int count[26];
+}node;
+//==========================
+node*getnode(void)
+{  int i;
+	node*temp=(node*)malloc(sizeof(node));
+    for(i=0;i<26;i++)
+    {
+    	temp->pos[i]=NULL;
+    	temp->count[i]=0;
+    }
+    return temp;
+}
+//==========================
+void Add(node*root,char str[])
+{  
+	int len=strlen(str),i;
+	for(i=0;i<len;i++)
+	{
+		if(root->pos[str[i]-'a']==NULL)
+			{
+				root->pos[str[i]-'a']=getnode();
+		        root->count[str[i]-'a']++;
+		    	root=root->pos[str[i]-'a'];
+		    }
+		else 
+		    {
+                root->count[str[i]-'a']++;
+		        root=root->pos[str[i]-'a'];
+		    }
+	}
+}
+//==========================
+int Find(node*root,char str[])
+{ int i,len;
+	len=strlen(str);
+
+    for(i=0;i<len;i++)
+    {
+    	if(root->pos[str[i]-'a']==NULL)
+    		return 0;
+    	else if(i==len-1)
+    		return root->count[str[i]-'a'];
+    	else root=root->pos[str[i]-'a'];		
+
+    }
+ return 0;
+}
+
+//==========================
+int main()
+{   int t;     node*head=getnode();
+   scanf("%d",&t);
+	while(t--)
+	{  
+		char query[35],str[35];
+
+		scanf("%s%s",query,str);
+	  if(strcmp(query,"add")==0)
+		Add(head,str);
+	  else printf("%d\n",Find(head,str));
+	   
+    }
+}
